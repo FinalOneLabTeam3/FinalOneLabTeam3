@@ -60,10 +60,8 @@ class PhotosViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         addSubview(imageView)
         imageView.clipsToBounds = true
-        
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         imageView.layer.cornerRadius = 10
     }

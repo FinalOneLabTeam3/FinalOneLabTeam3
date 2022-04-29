@@ -13,21 +13,21 @@ struct Collection: Decodable{
 }
 
 struct UnsplashCollection: Decodable{
-//    let width: [CoverPhoto.RawValue: String]
-//    let height: [CoverPhoto.RawValue: String]
-    let urls: [URLKIng.RawValue:String]
     let cover_photo: CoverPhoto
-    enum URLKIng: String{
+    
+}
+
+struct CoverPhoto: Decodable {
+    let width: Int
+    let height: Int
+    let description: String?
+    let urls: [URLKind.RawValue:String]
+    
+    enum URLKind: String{
         case raw
         case full
         case regular
         case small
         case thumb
     }
-}
-
-struct CoverPhoto: Decodable {
-    let width: Int
-    let height: Int
-    let description: String
 }

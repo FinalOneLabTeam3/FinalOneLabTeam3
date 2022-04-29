@@ -41,11 +41,17 @@ class SearchViewController: UIViewController {
 
     private var timer: Timer?
     
-    let segmentedControl : UISegmentedControl = {
+    lazy var segmentedControl : UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Photos", "Collections", "Users"])
         sc.selectedSegmentIndex = 0
+        sc.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         return sc
     }()
+    
+    @objc
+    private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+        collectionView.reloadData()
+    }
     
     let searchController : UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -60,7 +66,7 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setUpSearchController()
-        setUpCollectionView()
+        
         print(segmentedControl.frame.height)
     }
 
@@ -80,20 +86,11 @@ class SearchViewController: UIViewController {
     }
     private func setUpSegmentControl(){
         
-//        let stackView = UIStackView(arrangedSubviews: [segmentedControl, collectionView])
-//        stackView.axis = .vertical
-//        view.addSubview(stackView)
-//        stackView.snp.makeConstraints { make in
-//            make.top.equalToSuperview().inset(200)
-//            make.trailing.leading.equalToSuperview()
-//        }
-        
         view.addSubview(segmentedControl)
         segmentedControl.snp.makeConstraints { make in
-            make.top.equalTo(searchController.searchBar).inset(60)
+            make.top.equalTo(searchController.searchBar.snp.bottom).offset(20)
             make.trailing.leading.equalToSuperview().inset(20)
         }
-        
     }
     
     
@@ -103,9 +100,10 @@ class SearchViewController: UIViewController {
         print(segmentedControl.frame.height)
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(searchController.searchBar.frame.height + 127)
+            make.top.equalTo(segmentedControl.snp.bottom).offset(20)
+//            make.top.equalTo(segmentedControl.snp.bottom).inset(searchController.searchBar.frame.height + 127)
             make.trailing.leading.equalToSuperview()
-            make.bottom.equalToSuperview().inset(50)
+            make.bottom.equalToSuperview()
         }
     }
 
@@ -114,6 +112,8 @@ class SearchViewController: UIViewController {
         navigationItem.searchController = searchController
         searchController.searchBar.delegate = self
     }
+    
+    
     
 
 
@@ -125,6 +125,7 @@ extension SearchViewController: UICollectionViewDataSource{
         case 0:
             return photos.count
         case 1:
+            print("collection count \(collections.count)")
             return collections.count
         default:
             return 0
@@ -140,6 +141,8 @@ extension SearchViewController: UICollectionViewDataSource{
             cell.unsplashPhoto = unsplashPhoto
             return cell
         case 1:
+            print("selected segment = 1 collections")
+            self.collectionView.reloadData()
             collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.reuseID)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.reuseID, for: indexPath) as! CollectionViewCell
             let unsplashCollection = collections[indexPath.item]
@@ -159,9 +162,13 @@ extension SearchViewController: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         setUpSegmentControl()
+        setUpCollectionView()
         setUpFilterButton()
         timer?.invalidate()
         guard let searchText = searchBar.text else { return }
+        
+        
+            
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [self](_) in
             self.networkDataFetch.fetchImages(searchTerm: searchText, path: PhotosViewCell.path) { [weak self] (results) in
                 guard let fetchedPhotos = results else { return }
@@ -171,6 +178,7 @@ extension SearchViewController: UISearchBarDelegate{
             self.networkDataFetch.fetchCollections(searchTerm: searchText, path: CollectionViewCell.path) { [weak self] (results) in
                 guard let fetchedCollections = results else { return }
                 self?.collections = fetchedCollections.results
+                self?.collectionView.reloadData()
             }
         })
     }
@@ -186,19 +194,13 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout{
         switch segmentedControl.selectedSegmentIndex{
         case 0:
             let paddingSpace = sectionInserts.left * (itemsPerRow + 0.5)
-//            print(paddingSpace)
             let availableWidth = collectionView.frame.width - paddingSpace
-//            print(availableWidth)
             let widthPerItem = availableWidth / itemsPerRow
             let photo = photos[indexPath.item]
             let height = CGFloat(photo.height) * widthPerItem / CGFloat(photo.width)
             return CGSize(width: widthPerItem, height: height)
         case 1:
-            let paddingSpace = sectionInserts.left * (itemsPerRow + 2)
-//            print(paddingSpace)
-            let availableWidth = collectionView.frame.width - paddingSpace
-//            print(availableWidth)
-            let widthPerItem = availableWidth / itemsPerRow
+            let widthPerItem = collectionView.frame.width - (sectionInserts.left * 2)
             let collection = collections[indexPath.item]
             let height = CGFloat(collection.cover_photo.height) * widthPerItem / CGFloat(collection.cover_photo.width)
             return CGSize(width: widthPerItem, height: height)

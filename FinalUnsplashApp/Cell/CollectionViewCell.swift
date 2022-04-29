@@ -13,27 +13,42 @@ class CollectionViewCell: UICollectionViewCell {
     
     static let reuseID = "CollectionsCell"
     static let path = "/search/collections"
+    
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .systemGray5
         imageView.contentMode = .scaleAspectFill
+        
         return imageView
     }()
     
+    
+    
+    private func didAddTint(){
+        let blackoutImage = UIView()
+        blackoutImage.backgroundColor = UIColor(white: 0.5, alpha: 0.01)
+        blackoutImage.frame = CGRect(x: 0, y: 0, width: imageView.frame.width, height: imageView.frame.height)
+        imageView.addSubview(blackoutImage)
+    }
+    
     private let collectionLabel: UILabel = {
         let collectionLabel = UILabel()
+        collectionLabel.textColor = .white
+        collectionLabel.sizeToFit()
+//        collectionLabel.numberOfLines = 0
         return collectionLabel
     }()
     
     var unsplashCollection: UnsplashCollection! {
         didSet{
-            let collectionUrl = unsplashCollection.urls["thumb"]
+            let collectionUrl = unsplashCollection.cover_photo.urls["thumb"]
             guard let collectionUrl = collectionUrl, let url = URL(string: collectionUrl)
             else { return }
 //            collectionLabel.text = unsplashPhoto.description
             imageView.sd_setImage(with: url, completed: nil)
-//            collectionLabel.text = unsplashCollection.cover_photo.description
+            collectionLabel.text = unsplashCollection.cover_photo.description ?? ""
 //            print(unsplashCollection.cover_photo.width)
         }
     }
@@ -41,6 +56,7 @@ class CollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
+        collectionLabel.text = ""
     }
     
     override init(frame: CGRect) {
@@ -53,12 +69,12 @@ class CollectionViewCell: UICollectionViewCell {
     
     
     override func layoutSubviews() {
+        didAddTint()
         addSubview(imageView)
         imageView.clipsToBounds = true
         
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         imageView.layer.cornerRadius = 10
         

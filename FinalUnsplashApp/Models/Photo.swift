@@ -15,11 +15,10 @@ struct Photo: Decodable{
 struct UnsplashPhoto: Decodable{
     let width: Int
     let height: Int
-    let urls: [URLKIng.RawValue:String]
-//    let description: String?
-//    let colWidth: [Val]
+    let urls: [URLKind.RawValue:String]
+
     
-    enum URLKIng: String{
+    enum URLKind: String{
         case raw
         case full
         case regular
