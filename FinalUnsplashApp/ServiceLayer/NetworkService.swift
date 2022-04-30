@@ -18,6 +18,14 @@ class NetworkService {
         let task = createDataTask(from: request, completion: completion)
         task.resume()
     }
+    func request(username: String, path: String, completion: @escaping (Data?, Error?) -> Void){
+        let url = url(params: [:], path: path)
+        var request = URLRequest(url: url)
+        request.allHTTPHeaderFields = prepareHeaders()
+        request.httpMethod = "get"
+        let task = createDataTask(from: request, completion: completion)
+        task.resume()
+    }
     
     
     private func prepareHeaders() -> [String : String]{

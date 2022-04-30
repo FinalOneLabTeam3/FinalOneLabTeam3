@@ -7,7 +7,7 @@
 
 import Foundation
 
-class NetworkDateFetch{
+class NetworkDataFetch{
     
     let networkService = NetworkService()
     
@@ -45,6 +45,58 @@ class NetworkDateFetch{
             
             let decode = self.decodeJSON(type: User.self, from: data)
             print("fetched users")
+            completion(decode)
+        }
+    }
+    
+    func fetchUser(username: String, completion: @escaping (UnsplashUser?) -> ()){
+        networkService.request(username: username, path: "/users/\(username)") { (data, error) in
+            if let error = error {
+                print("Error received requesting data: \(error.localizedDescription)")
+                completion(nil)
+            }
+            
+            let decode = self.decodeJSON(type: UnsplashUser.self, from: data)
+            print("fetched user")
+            completion(decode)
+        }
+    }
+    
+    func fetchUserPhotos(username: String, completion: @escaping ([UnsplashPhoto]?) -> ()){
+        networkService.request(username: username, path: "/users/\(username)/photos") { (data, error) in
+            if let error = error {
+                print("Error received requesting data: \(error.localizedDescription)")
+                completion(nil)
+            }
+            
+            let decode = self.decodeJSON(type: [UnsplashPhoto].self, from: data)
+            print("fetched photos")
+            completion(decode)
+        }
+    }
+    
+    func fetchUserLikedPhotos(username: String, completion: @escaping ([UnsplashPhoto]?) -> ()){
+        networkService.request(username: username, path: "/users/\(username)/likes") { (data, error) in
+            if let error = error {
+                print("Error received requesting data: \(error.localizedDescription)")
+                completion(nil)
+            }
+            
+            let decode = self.decodeJSON(type: [UnsplashPhoto].self, from: data)
+            print("fetched liked photos")
+            completion(decode)
+        }
+    }
+    
+    func fetchUserCollections(username: String, completion: @escaping ([UnsplashCollection]?) -> ()){
+        networkService.request(username: username, path: "/users/\(username)/collections") { (data, error) in
+            if let error = error {
+                print("Error received requesting data: \(error.localizedDescription)")
+                completion(nil)
+            }
+            
+            let decode = self.decodeJSON(type: [UnsplashCollection].self, from: data)
+            print("fetched collections")
             completion(decode)
         }
     }

@@ -13,9 +13,9 @@ struct User: Decodable{
 }
 
 struct UnsplashUser: Decodable{
-    let id: String
     let name: String
     let username: String
+    let location: String?
     let profile_image: [URLKIng.RawValue:String]
     
     enum URLKIng: String{

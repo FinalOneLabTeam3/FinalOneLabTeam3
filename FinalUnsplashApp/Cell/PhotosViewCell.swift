@@ -25,7 +25,14 @@ class PhotosViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .systemGray5
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         return imageView
+    }()
+    
+    private let authorLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        return label
     }()
     
     var unsplashPhoto: UnsplashPhoto! {
@@ -34,8 +41,11 @@ class PhotosViewCell: UICollectionViewCell {
             guard let imageUrl = photoUrl, let url = URL(string: imageUrl)
             else { return }
             imageView.sd_setImage(with: url, completed: nil)
+            authorLabel.text = unsplashPhoto.user.name
         }
     }
+    var cornerRadius: CGFloat = 10
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
@@ -58,11 +68,18 @@ class PhotosViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         addSubview(imageView)
-        imageView.clipsToBounds = true
+        addSubview(authorLabel)
+
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = cornerRadius
+        
+        authorLabel.snp.makeConstraints {
+            $0.leading.equalTo(imageView).offset(10)
+            $0.bottom.equalTo(imageView).inset(10)
+            $0.trailing.equalTo(imageView).inset(10)
+        }
     }
     
 //    func configureCell(data: UnsplashPhoto) {
@@ -72,7 +89,9 @@ class PhotosViewCell: UICollectionViewCell {
 //        imageView.sd_setImage(with: url, completed: nil)
 //    }
     
-    
+    func clearAuthorLabel() {
+        authorLabel.text = ""
+    }
     
     
 }

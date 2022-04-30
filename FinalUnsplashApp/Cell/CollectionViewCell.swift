@@ -49,12 +49,12 @@ class CollectionViewCell: UICollectionViewCell {
     
     var unsplashCollection: UnsplashCollection! {
         didSet{
-            let collectionUrl = unsplashCollection.cover_photo.urls["thumb"]
-            guard let collectionUrl = collectionUrl, let url = URL(string: collectionUrl)
+            guard let collectionUrl = unsplashCollection.cover_photo?.urls["thumb"] else { return }
+            guard let url = URL(string: collectionUrl)
             else { return }
 //            collectionLabel.text = unsplashPhoto.description
             imageView.sd_setImage(with: url, completed: nil)
-            collectionLabel.text = unsplashCollection.cover_photo.description ?? ""
+            collectionLabel.text = unsplashCollection.title
 //            print(unsplashCollection.cover_photo.width)
         }
     }
