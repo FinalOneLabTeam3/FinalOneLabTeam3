@@ -28,6 +28,12 @@ class UserDetailViewModel {
             reloadCollectionView()
         }
     }
+    private var userPhotosPage = 0
+    private var likedPhotosPage = 0
+    private var collectionsPage = 0
+    private var isUserPhotosLoading = false
+    private var isLikedPhotosLoading = false
+    private var isCollectionsLoading = false
     
     var didLoadUserInfo: ((UnsplashUser) -> Void)?
     var reloadCollectionView: (() -> Void)?
@@ -37,31 +43,50 @@ class UserDetailViewModel {
         self.user = user
     }
     
-    func fetchUserInfo() {
-        self.networkDataFetch.fetchUser(username: user.username) { [weak self] (result) in
-            guard let fetchedUser = result else { return }
-            self?.didLoadUserInfo?(fetchedUser)
-        }
-    }
+//    func fetchUserInfo() {
+//        self.networkDataFetch.fetchUser(username: user.username) { [weak self] (result) in
+//            guard let fetchedUser = result else { return }
+//            self?.didLoadUserInfo?(fetchedUser)
+//        }
+//    }
     
     func fetchUserPhotos() {
-        self.networkDataFetch.fetchUserPhotos(username: user.username) { [weak self] (results) in
+        if isUserPhotosLoading {
+            return
+        }
+        isUserPhotosLoading = true
+        self.networkDataFetch.fetchUserPhotos(username: user.username, page: userPhotosPage) { [weak self] (results) in
             guard let fetchedPhotos = results else { return }
-            self?.photos = fetchedPhotos
+            self?.photos.append(contentsOf: fetchedPhotos)
+            self?.userPhotosPage += 1
+            self?.isUserPhotosLoading = false
         }
     }
     
     func fetchLikedPhotos() {
-        self.networkDataFetch.fetchUserLikedPhotos(username: user.username) { [weak self] (results) in
+        if isLikedPhotosLoading {
+            return
+        }
+        isLikedPhotosLoading = true
+        self.networkDataFetch.fetchUserLikedPhotos(username: user.username, page: likedPhotosPage) { [weak self] (results) in
             guard let fetchedPhotos = results else { return }
-            self?.likedPhotos = fetchedPhotos
+            self?.likedPhotos.append(contentsOf: fetchedPhotos)
+            self?.likedPhotosPage += 1
+            self?.isLikedPhotosLoading = false
         }
     }
     
     func fetchCollections() {
-        self.networkDataFetch.fetchUserCollections(username: user.username) { [weak self] (results) in
+        if isCollectionsLoading {
+            return
+        }
+        isCollectionsLoading = true
+        self.networkDataFetch.fetchUserCollections(username: user.username, page: collectionsPage) { [weak self] (results) in
             guard let fetchedCollections = results else { return }
-            self?.collections = fetchedCollections
+            self?.collections.append(contentsOf: fetchedCollections)
+            print( self?.collectionsPage)
+            self?.collectionsPage += 1
+            self?.isCollectionsLoading = false
         }
     }
     

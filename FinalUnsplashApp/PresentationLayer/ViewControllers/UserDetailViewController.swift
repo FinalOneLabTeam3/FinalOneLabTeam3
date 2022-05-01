@@ -383,13 +383,27 @@ extension UserDetailViewController: UICollectionViewDelegateFlowLayout {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let position = scrollView.contentOffset.y
         
+        // Title Hide and Reveal
         guard let navBarHeight = navigationController?.navigationBar.frame.height else { return }
         let userInfoHeaderHeight: CGFloat = viewModel.getUser().location != nil ? 240 : 210
-        
-        if position > navBarHeight + userInfoHeaderHeight {
+        if position > navBarHeight + userInfoHeaderHeight - (segmentedControl.frame.height + 10*2) {
             title = viewModel.getUser().name
         } else {
             title = ""
+        }
+        
+        if position > (collectionView.contentSize.height - 100 - scrollView.frame.size.height) {
+            // fetch more data
+            switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                viewModel.fetchUserPhotos()
+            case 1:
+                viewModel.fetchLikedPhotos()
+            case 2:
+                viewModel.fetchCollections()
+            default:
+                return
+            }
         }
     }
 }

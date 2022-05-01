@@ -18,8 +18,9 @@ class NetworkService {
         let task = createDataTask(from: request, completion: completion)
         task.resume()
     }
-    func request(username: String, path: String, completion: @escaping (Data?, Error?) -> Void){
-        let url = url(params: [:], path: path)
+    func request(username: String, path: String, page: Int, completion: @escaping (Data?, Error?) -> Void){
+        let parameters = self.prepareParams(page: page)
+        let url = url(params: parameters, path: path)
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = prepareHeaders()
         request.httpMethod = "get"
@@ -40,11 +41,9 @@ class NetworkService {
         params["per_page"] = String(30)
         return params
     }
-    private func prepareParams(searchTerm: String, page: Int) -> [String : String] {
+    private func prepareParams(page: Int) -> [String : String] {
         var params = [String : String]()
-        params["query"] = searchTerm
         params["page"] = String(page)
-        params["per_page"] = String(30)
         return params
     }
     
