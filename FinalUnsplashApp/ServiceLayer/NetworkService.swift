@@ -40,6 +40,13 @@ class NetworkService {
         params["per_page"] = String(30)
         return params
     }
+    private func prepareParams(searchTerm: String, page: Int) -> [String : String] {
+        var params = [String : String]()
+        params["query"] = searchTerm
+        params["page"] = String(page)
+        params["per_page"] = String(30)
+        return params
+    }
     
     private func url(params: [String : String], path: String) -> URL {
         var components = URLComponents()

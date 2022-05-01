@@ -155,6 +155,7 @@ class SearchViewController: UIViewController {
     private func setUpBackBarButtonItem() {
         let backBarBtnItem = UIBarButtonItem()
         backBarBtnItem.title = ""
+        backBarBtnItem.tintColor = .label
         navigationItem.backBarButtonItem = backBarBtnItem
     }
     
