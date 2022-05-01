@@ -50,23 +50,25 @@ class UserDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         layoutNavBar()
         
-        bindViewModel()
         viewModel.fetchUserInfo()
         viewModel.fetchUserPhotos()
         viewModel.fetchLikedPhotos()
         viewModel.fetchCollections()
         
         layoutUI()
+        bindViewModel()
     }
     
     private func bindViewModel() {
         
         viewModel.didLoadUserInfo = { [weak self] user in
-            print(user.location)
+            self?.title = user.name
         }
         
         viewModel.reloadCollectionView = { [weak self] in
-            self?.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
         }
     }
     
@@ -155,11 +157,13 @@ extension UserDetailViewController: UICollectionViewDataSource {
 extension UserDetailViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
         
-        switch segmentedControl.selectedSegmentIndex {
+        switch selectedSegmentIndex {
         case 0, 1:
             let widthPerItem = collectionView.frame.width
-            let photo = viewModel.getUserPhotos()[indexPath.item]
+            let photos = selectedSegmentIndex == 0 ? viewModel.getUserPhotos() : viewModel.getLikedPhotos()
+            let photo = photos[indexPath.item]
             let height = CGFloat(photo.height) * widthPerItem / CGFloat(photo.width)
             return CGSize(width: widthPerItem, height: height)
         case 2:

@@ -90,6 +90,7 @@ class SearchViewController: UIViewController {
         setUpCollectionView()
         setUpTableView()
         setUpFilterButton()
+        setUpBackBarButtonItem()
         cellActionHandlers()
         print(segmentedControl.frame.height)
         
@@ -149,6 +150,12 @@ class SearchViewController: UIViewController {
             $0.bottom.equalToSuperview().inset(50)
         }
         tableView.layer.cornerRadius = 20
+    }
+    
+    private func setUpBackBarButtonItem() {
+        let backBarBtnItem = UIBarButtonItem()
+        backBarBtnItem.title = ""
+        navigationItem.backBarButtonItem = backBarBtnItem
     }
     
     private func cellActionHandlers() {
