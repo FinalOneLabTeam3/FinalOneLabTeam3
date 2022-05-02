@@ -1,12 +1,12 @@
 //
-//  CollectionViewCell.swift
+//  CollectionCell.swift
 //  FinalUnsplashApp
 //
 //  Created by Akniyet Turdybay on 27.04.2022.
 //
 
 //
-//  CollectionViewCell.swift
+//  CollectionCell.swift
 //  FinalUnsplashApp
 //
 //  Created by Akniyet Turdybay on 27.04.2022.
@@ -15,7 +15,7 @@ import UIKit
 import SDWebImage
 import SnapKit
 
-class CollectionViewCell: UICollectionViewCell {
+class CollectionCell: UICollectionViewCell {
     
     static let reuseID = "CollectionsCell"
     static let path = "/search/collections"
@@ -67,6 +67,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        didAddTint()
     }
     
     required init?(coder: NSCoder) {
@@ -75,7 +76,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     
     override func layoutSubviews() {
-        didAddTint()
+        
         addSubview(imageView)
         imageView.clipsToBounds = true
         
@@ -89,6 +90,11 @@ class CollectionViewCell: UICollectionViewCell {
             make.centerX.centerY.equalToSuperview()
         }
     }
+    
+//    func configure(category: Category){
+//        imageView.image = UIImage(named: category.imageName)
+//        collectionLabel.text = category.collectionLabel
+//    }
     
 
 }

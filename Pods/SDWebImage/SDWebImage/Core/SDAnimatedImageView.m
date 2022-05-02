@@ -405,7 +405,7 @@
 
 - (void)setHighlighted:(BOOL)highlighted
 {
-    // Highlighted image is unsupported for animated images, but implementing it breaks the image view when embedded in a UICollectionViewCell.
+    // Highlighted image is unsupported for animated images, but implementing it breaks the image view when embedded in a UICollectionCell.
     if (!self.player) {
         [super setHighlighted:highlighted];
     }

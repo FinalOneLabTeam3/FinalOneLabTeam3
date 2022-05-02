@@ -278,8 +278,8 @@ extension UserDetailViewController: UICollectionViewDataSource {
         
         switch selectedSegmentIndex {
         case 0, 1:
-            collectionView.register(PhotosViewCell.self, forCellWithReuseIdentifier: PhotosViewCell.reuseID)
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosViewCell.reuseID, for: indexPath) as! PhotosViewCell
+            collectionView.register(PhotosCell.self, forCellWithReuseIdentifier: PhotosCell.reuseID)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCell.reuseID, for: indexPath) as! PhotosCell
             let photos = selectedSegmentIndex == 0 ? viewModel.getUserPhotos() : viewModel.getLikedPhotos()
             cell.unsplashPhoto = photos[indexPath.row]
             cell.cornerRadius = 0
@@ -288,13 +288,12 @@ extension UserDetailViewController: UICollectionViewDataSource {
             }
             return cell
         case 2:
-            collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.reuseID)
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.reuseID, for: indexPath) as! CollectionViewCell
+            collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.reuseID)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.reuseID, for: indexPath) as! CollectionCell
             cell.unsplashCollection = viewModel.getCollections()[indexPath.row]
             return cell
         default:
             print("default")
-            // Empty cell
             return UICollectionViewCell()
         }
     }

@@ -18,6 +18,7 @@ class NetworkService {
         let task = createDataTask(from: request, completion: completion)
         task.resume()
     }
+    
     func request(username: String, path: String, page: Int, completion: @escaping (Data?, Error?) -> Void){
         let parameters = self.prepareParams(page: page)
         let url = url(params: parameters, path: path)

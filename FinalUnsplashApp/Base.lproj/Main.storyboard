@@ -17,10 +17,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnT-6d-CK9">
-                                <rect key="frame" x="152" y="327" width="90" height="31"/>
+                                <rect key="frame" x="153" y="328" width="89" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="slider.horizontal.3" catalog="system" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="magnifyingglass" catalog="system" title="Button"/>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -33,7 +33,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="slider.horizontal.3" catalog="system" width="128" height="100"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

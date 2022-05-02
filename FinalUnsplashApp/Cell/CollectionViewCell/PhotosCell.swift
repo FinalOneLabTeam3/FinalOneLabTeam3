@@ -1,5 +1,5 @@
 //
-//  PhotosViewCell.swift
+//  PhotosCell.swift
 //  FinalUnsplashApp
 //
 //  Created by Akniyet Turdybay on 26.04.2022.
@@ -9,8 +9,8 @@ import UIKit
 import SDWebImage
 import SnapKit
 
-//typealias PhotosCellConfigurator = CollectionCellConfigurator<PhotosViewCell, UnsplashPhoto>
-class PhotosViewCell: UICollectionViewCell {
+//typealias PhotosCellConfigurator = CollectionCellConfigurator<PhotosCell, UnsplashPhoto>
+class PhotosCell: UICollectionViewCell {
     
     
     
@@ -53,7 +53,7 @@ class PhotosViewCell: UICollectionViewCell {
     }
    
     
-//    override init(style: UICollectionViewCell, reuseIdentifier: String?) {
+//    override init(style: UICollectionCell, reuseIdentifier: String?) {
 //            super.init(style: style, reuseIdentifier: reuseIdentifier)
 ////            layoutUI()
 //    }
@@ -95,4 +95,9 @@ class PhotosViewCell: UICollectionViewCell {
     }
     
     
+    
+    
+    
+    
 }
+
