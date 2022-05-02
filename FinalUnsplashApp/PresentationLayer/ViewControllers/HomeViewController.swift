@@ -30,6 +30,7 @@ class HomeViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = .label
         return collectionView
     }()
     
@@ -45,6 +46,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Unsplash"
+        view.backgroundColor = .systemBlue
         makeNavBarTransparent()
         
         layoutUI()
@@ -60,6 +62,7 @@ class HomeViewController: UIViewController {
             navBar?.standardAppearance.shadowImage = UIImage()
             navBar?.standardAppearance.shadowColor = .clear
             navBar?.standardAppearance.backgroundImage = UIImage()
+            navBar?.standardAppearance.titleTextAttributes = [ NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20), NSAttributedString.Key.foregroundColor: UIColor.white]
         }
     }
     
