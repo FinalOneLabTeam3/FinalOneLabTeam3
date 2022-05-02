@@ -18,6 +18,7 @@ class HomeViewController: UIViewController {
         collectionLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = UIColor.clear.withAlphaComponent(0)
         collectionView.dataSource = self
         collectionView.delegate = self
         return collectionView
@@ -44,15 +45,27 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Unsplash"
+        makeNavBarTransparent()
         
         layoutUI()
         viewModel.fetchTopics()
         bindViewModel()
     }
     
+    private func makeNavBarTransparent() {
+        if #available(iOS 13, *) {
+            let navBar = navigationController?.navigationBar
+            navBar?.standardAppearance.backgroundColor = UIColor.clear
+            navBar?.standardAppearance.backgroundEffect = nil
+            navBar?.standardAppearance.shadowImage = UIImage()
+            navBar?.standardAppearance.shadowColor = .clear
+            navBar?.standardAppearance.backgroundImage = UIImage()
+        }
+    }
+    
     private func layoutUI() {
-        view.addSubview(topicsCollectionView)
         view.addSubview(photosCollectionView)
+        view.addSubview(topicsCollectionView)
         
         topicsCollectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
@@ -61,9 +74,10 @@ class HomeViewController: UIViewController {
         }
         
         photosCollectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(menuHeight)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.width.equalToSuperview()
+//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(menuHeight)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+//            $0.width.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
     

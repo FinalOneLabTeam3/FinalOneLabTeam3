@@ -14,12 +14,13 @@ class TopicViewCell: UICollectionViewCell {
     private let topicTitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.textColor = .white
         return label
     }()
     
     private let underlineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .label
+        view.backgroundColor = .white
         view.clipsToBounds = true
         view.isHidden = true
         return view
