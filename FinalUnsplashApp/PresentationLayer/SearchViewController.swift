@@ -14,6 +14,7 @@ class SearchViewController: UIViewController {
         let collectionLayout = UICollectionViewFlowLayout()
         collectionLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
+        collectionView.isHidden = true
         return collectionView
     }()
     
@@ -24,6 +25,7 @@ class SearchViewController: UIViewController {
         filterButton.setImage(UIImage(systemName: "slider.horizontal.3") , for: .normal)
         filterButton.imageView?.contentMode = .scaleAspectFit
         filterButton.layer.cornerRadius = 5
+        filterButton.isHidden = true
         return filterButton
     }()
     
@@ -44,6 +46,7 @@ class SearchViewController: UIViewController {
     lazy var segmentedControl : UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Photos", "Collections", "Users"])
         sc.selectedSegmentIndex = 0
+        sc.isHidden = true
         sc.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         return sc
     }()
@@ -66,8 +69,9 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setUpSearchController()
-        
-        print(segmentedControl.frame.height)
+        setUpSegmentControl()
+        setUpCollectionView()
+        setUpFilterButton()
     }
 
 
@@ -97,7 +101,6 @@ class SearchViewController: UIViewController {
     private func setUpCollectionView(){
         collectionView.delegate = self
         collectionView.dataSource = self
-        print(segmentedControl.frame.height)
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(20)
@@ -112,9 +115,6 @@ class SearchViewController: UIViewController {
         navigationItem.searchController = searchController
         searchController.searchBar.delegate = self
     }
-    
-    
-    
 
 
 }
@@ -161,9 +161,10 @@ extension SearchViewController: UICollectionViewDataSource{
 extension SearchViewController: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        setUpSegmentControl()
-        setUpCollectionView()
-        setUpFilterButton()
+        segmentedControl.isHidden = false
+        collectionView.isHidden = false
+        filterButton.isHidden = false
+        
         timer?.invalidate()
         guard let searchText = searchBar.text else { return }
         

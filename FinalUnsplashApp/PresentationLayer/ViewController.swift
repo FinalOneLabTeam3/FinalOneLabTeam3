@@ -14,6 +14,7 @@ class ViewController: UITabBarController {
         configureTabBar()
     }
     private func configureTabBar(){
+        tabBar.backgroundColor = .systemGray5
         let feedVC = configureNavBarController(vc: SearchViewController(), image: "text.below.photo.fill")
         feedVC.title = "My Photos"
         self.setViewControllers([feedVC], animated: false)
