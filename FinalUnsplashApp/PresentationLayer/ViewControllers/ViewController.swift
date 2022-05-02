@@ -11,12 +11,27 @@ class ViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         configureTabBar()
+        removeTabBarTransparency()
     }
-    private func configureTabBar(){
+    private func configureTabBar() {
         let feedVC = configureNavBarController(vc: SearchViewController(), image: "text.below.photo.fill")
+        let homeVC = configureNavBarController(vc: HomeViewController(viewModel: HomeViewModel(networkDataFetch: NetworkDataFetch())), image: "photo")
         feedVC.title = "My Photos"
-        self.setViewControllers([feedVC], animated: false)
+        self.setViewControllers([homeVC, feedVC], animated: false)
+    }
+    private func removeTabBarTransparency() {
+        if #available(iOS 13.0, *) {
+            let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            tabBarAppearance.backgroundColor = .systemBackground
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+
+            if #available(iOS 15.0, *) {
+                UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+            }
+        }
     }
 }
 

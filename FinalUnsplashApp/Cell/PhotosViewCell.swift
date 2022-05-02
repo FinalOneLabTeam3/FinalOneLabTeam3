@@ -83,6 +83,15 @@ class PhotosViewCell: UICollectionViewCell {
         }
     }
     
+    func configureCell(unsplashPhoto: UnsplashPhoto, cornerRadius: CGFloat = 10) {
+        let photoUrl = unsplashPhoto.urls["small"]
+        guard let imageUrl = photoUrl, let url = URL(string: imageUrl)
+        else { return }
+        imageView.sd_setImage(with: url, completed: nil)
+        authorLabel.text = unsplashPhoto.user.name
+        self.cornerRadius = cornerRadius
+    }
+    
 //    func configureCell(data: UnsplashPhoto) {
 //        let photoUrl = unsplashPhoto.urls["thumb"]
 //        guard let imageUrl = photoUrl, let url = URL(string: imageUrl)

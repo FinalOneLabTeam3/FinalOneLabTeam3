@@ -63,7 +63,7 @@ class NetworkDataFetch{
 //    }
     
     func fetchUserPhotos(username: String, page: Int, completion: @escaping ([UnsplashPhoto]?) -> ()){
-        networkService.request(username: username, path: "/users/\(username)/photos", page: page) { (data, error) in
+        networkService.request(path: "/users/\(username)/photos", page: page) { (data, error) in
             if let error = error {
                 print("Error received requesting data: \(error.localizedDescription)")
                 completion(nil)
@@ -76,7 +76,7 @@ class NetworkDataFetch{
     }
     
     func fetchUserLikedPhotos(username: String, page: Int, completion: @escaping ([UnsplashPhoto]?) -> ()){
-        networkService.request(username: username, path: "/users/\(username)/likes", page: page) { (data, error) in
+        networkService.request(path: "/users/\(username)/likes", page: page) { (data, error) in
             if let error = error {
                 print("Error received requesting data: \(error.localizedDescription)")
                 completion(nil)
@@ -89,7 +89,7 @@ class NetworkDataFetch{
     }
     
     func fetchUserCollections(username: String, page: Int, completion: @escaping ([UnsplashCollection]?) -> ()){
-        networkService.request(username: username, path: "/users/\(username)/collections", page: page) { (data, error) in
+        networkService.request(path: "/users/\(username)/collections", page: page) { (data, error) in
             if let error = error {
                 print("Error received requesting data: \(error.localizedDescription)")
                 completion(nil)
@@ -97,6 +97,32 @@ class NetworkDataFetch{
             
             let decode = self.decodeJSON(type: [UnsplashCollection].self, from: data)
             print("fetched collections")
+            completion(decode)
+        }
+    }
+    
+    func fetchTopics(completion: @escaping ([Topic]?) -> ()){
+        networkService.request(path: "/topics") { (data, error) in
+            if let error = error {
+                print("Error received requesting data: \(error.localizedDescription)")
+                completion(nil)
+            }
+
+            let decode = self.decodeJSON(type: [Topic].self, from: data)
+            print("fetched topics")
+            completion(decode)
+        }
+    }
+    
+    func fetchTopicPhotos(topic: Topic, page: Int, completion: @escaping ([UnsplashPhoto]?) -> ()){
+        networkService.request(path: "/topics/\(topic.slug)/photos", page: page) { (data, error) in
+            if let error = error {
+                print("Error received requesting data: \(error.localizedDescription)")
+                completion(nil)
+            }
+            
+            let decode = self.decodeJSON(type: [UnsplashPhoto].self, from: data)
+            print("fetched photos")
             completion(decode)
         }
     }

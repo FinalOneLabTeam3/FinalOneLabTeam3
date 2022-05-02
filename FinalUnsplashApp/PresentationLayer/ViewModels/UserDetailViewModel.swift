@@ -28,9 +28,9 @@ class UserDetailViewModel {
             reloadCollectionView()
         }
     }
-    private var userPhotosPage = 0
-    private var likedPhotosPage = 0
-    private var collectionsPage = 0
+    private var userPhotosPage = 1
+    private var likedPhotosPage = 1
+    private var collectionsPage = 1
     private var isUserPhotosLoading = false
     private var isLikedPhotosLoading = false
     private var isCollectionsLoading = false
