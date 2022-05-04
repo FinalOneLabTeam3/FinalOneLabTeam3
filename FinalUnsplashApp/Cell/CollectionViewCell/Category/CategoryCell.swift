@@ -15,7 +15,8 @@ class CategoryCell: UICollectionViewCell {
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 30
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         layout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return cv
@@ -35,6 +36,8 @@ class CategoryCell: UICollectionViewCell {
         discoverSectionTitle.font = UIFont.boldSystemFont(ofSize: 20)
         return discoverSectionTitle
     }()
+    
+    
     
     private let categories = [Category(imageName: "nature", categoryLabel: "Nature"),
                               Category(imageName: "texture", categoryLabel: "Texture"),
@@ -57,6 +60,7 @@ class CategoryCell: UICollectionViewCell {
         setUpCategoryTitle()
         layoutUI()
         setUpDiscoveryTitle()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -92,7 +96,7 @@ class CategoryCell: UICollectionViewCell {
     }
     
     private func setUpDiscoveryTitle(){
-        
+
         addSubview(discoverSectionTitle)
         discoverSectionTitle.snp.makeConstraints { make in
             make.top.equalTo(collectionView.snp.bottom).offset(10)
@@ -135,7 +139,7 @@ extension CategoryCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: collectionView.frame.size.width / 3.5 , height: collectionView.frame.width / 3.5 )
+        return CGSize(width: 100 , height: 100)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

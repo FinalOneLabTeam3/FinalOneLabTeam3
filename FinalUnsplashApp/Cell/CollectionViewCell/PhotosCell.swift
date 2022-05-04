@@ -9,12 +9,7 @@ import UIKit
 import SDWebImage
 import SnapKit
 
-//typealias PhotosCellConfigurator = CollectionCellConfigurator<PhotosCell, UnsplashPhoto>
 class PhotosCell: UICollectionViewCell {
-    
-    
-    
-//    typealias DataType = UnsplashPhoto
     
     static let reuseID = "PhotosCell"
     
@@ -37,7 +32,6 @@ class PhotosCell: UICollectionViewCell {
     
     var unsplashPhoto: UnsplashPhoto! {
         didSet{
-//            let photoUrl = unsplashPhoto.urls["thumb"]
             let photoUrl = unsplashPhoto.urls["small"]
             guard let imageUrl = photoUrl, let url = URL(string: imageUrl)
             else { return }
@@ -51,12 +45,6 @@ class PhotosCell: UICollectionViewCell {
         super.prepareForReuse()
         imageView.image = nil
     }
-   
-    
-//    override init(style: UICollectionCell, reuseIdentifier: String?) {
-//            super.init(style: style, reuseIdentifier: reuseIdentifier)
-////            layoutUI()
-//    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -83,21 +71,8 @@ class PhotosCell: UICollectionViewCell {
         }
     }
     
-//    func configureCell(data: UnsplashPhoto) {
-//        let photoUrl = unsplashPhoto.urls["thumb"]
-//        guard let imageUrl = photoUrl, let url = URL(string: imageUrl)
-//        else { return }
-//        imageView.sd_setImage(with: url, completed: nil)
-//    }
-    
     func clearAuthorLabel() {
         authorLabel.text = ""
     }
-    
-    
-    
-    
-    
-    
 }
 

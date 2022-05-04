@@ -9,11 +9,9 @@ import UIKit
 
 class DiscoverCell: UICollectionViewCell {
     
-    let fetchListPhotos = FetchListPhotos()
+    let dataFetch = NetworkDataFetch()
     
     private var timer: Timer?
-   
-    var networkDataFetch = NetworkDataFetch()
     
     static let reuseID = "DiscoverCell"
     
@@ -33,12 +31,13 @@ class DiscoverCell: UICollectionViewCell {
         super.init(frame: frame)
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [self](_) in
-            self.fetchListPhotos.fetchListPhotos() { [weak self] (results) in
+            self.dataFetch.fetchImages(searchTerm: "random", path: PhotosCell.path) { [weak self] (results) in
                 guard let fetchedPhotos = results else { return }
                 self?.listPhotos = fetchedPhotos.results
                 self?.collectionView.reloadData()
             }
         })
+        
         print("list photos count = \(listPhotos.count)")
         layoutUI()
     }
@@ -50,10 +49,8 @@ class DiscoverCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        
-        
-        
     }
+    
     
     private func layoutUI(){
         let customLayout = CustomLayout()
@@ -88,37 +85,28 @@ extension DiscoverCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        collectionView.register(PhotosCell.self, forCellWithReuseIdentifier: DiscoverCell.reuseID)
+        collectionView.register(PhotosCell.self, forCellWithReuseIdentifier: PhotosCell.reuseID)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCell.reuseID, for: indexPath) as! PhotosCell
         let unsplashPhotos = listPhotos[indexPath.item]
         cell.unsplashPhoto = unsplashPhotos
         return cell
-        
-
     }
-
-
+    
 }
 
-//extension DiscoverCell: UICollectionViewDelegateFlowLayout {
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        
-//        return CGSize(width: collectionView.frame.size.width / 3.2 , height: collectionView.frame.width / 3.2 )
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//
-//        return UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
-//    }
-//
-//}
 
 extension DiscoverCell: CustomLayoutDelegate{
+
     func collectionView(_ collectionView: UICollectionView, sizeOfPhotoAtIndexPath indexPath: IndexPath) -> CGSize {
-        let photo = listPhotos[indexPath.item]
-        return  CGSize(width: photo.width, height: photo.height)
+            let photo = listPhotos[indexPath.item]
+            return  CGSize(width: photo.width, height: photo.height)
     }
-    
-    
 }
+
+extension DiscoverCell: UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+    }
+}
+
+

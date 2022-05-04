@@ -14,7 +14,6 @@ class CategoryItemCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-//        imageView.backgroundColor = .systemGray5
         imageView.layer.opacity = 0.8
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
@@ -25,8 +24,9 @@ class CategoryItemCell: UICollectionViewCell {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.sizeToFit()
+        label.font = UIFont.boldSystemFont(ofSize: 13)
+        label.textAlignment = .center
+        label.numberOfLines = 0
         return label
     }()
     
@@ -46,17 +46,13 @@ class CategoryItemCell: UICollectionViewCell {
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-//            make.trailing.leading.equalToSuperview()
-//            make.width.height.equalToSuperview()
-//            make.width.height.equalTo(contentView.frame.height / 2)
         }
         
         imageView.addSubview(categoryLabel)
         categoryLabel.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+            make.width.equalTo(100)
+            make.centerY.equalToSuperview()
         }
-        
-        
     }
     
     func configure(category: Category){
@@ -65,9 +61,8 @@ class CategoryItemCell: UICollectionViewCell {
     }
     
     private func layoutUI(){
-    
-//        backgroundColor = .blue
-        
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
-    
 }

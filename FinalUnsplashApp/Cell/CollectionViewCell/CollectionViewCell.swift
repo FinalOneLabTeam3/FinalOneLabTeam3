@@ -42,8 +42,9 @@ class CollectionCell: UICollectionViewCell {
     private let collectionLabel: UILabel = {
         let collectionLabel = UILabel()
         collectionLabel.textColor = .white
+        collectionLabel.textAlignment = .center
+        collectionLabel.numberOfLines = 0
         collectionLabel.sizeToFit()
-//        collectionLabel.numberOfLines = 0
         return collectionLabel
     }()
     
@@ -52,10 +53,8 @@ class CollectionCell: UICollectionViewCell {
             guard let collectionUrl = unsplashCollection.cover_photo?.urls["thumb"] else { return }
             guard let url = URL(string: collectionUrl)
             else { return }
-//            collectionLabel.text = unsplashPhoto.description
             imageView.sd_setImage(with: url, completed: nil)
             collectionLabel.text = unsplashCollection.title
-//            print(unsplashCollection.cover_photo.width)
         }
     }
     
@@ -79,22 +78,13 @@ class CollectionCell: UICollectionViewCell {
         
         addSubview(imageView)
         imageView.clipsToBounds = true
-        
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         imageView.layer.cornerRadius = 10
-        
         imageView.addSubview(collectionLabel)
         collectionLabel.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
         }
     }
-    
-//    func configure(category: Category){
-//        imageView.image = UIImage(named: category.imageName)
-//        collectionLabel.text = category.collectionLabel
-//    }
-    
-
 }

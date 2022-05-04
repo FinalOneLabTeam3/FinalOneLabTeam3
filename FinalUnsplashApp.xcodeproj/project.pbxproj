@@ -20,7 +20,6 @@
 		348F6AE8281D2504000507A2 /* UserDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348F6AE7281D2504000507A2 /* UserDetailViewModel.swift */; };
 		3BAD9F46CEAED3037D234C7C /* Pods_FinalUnsplashApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FE4D3E71C740185ACDCA058 /* Pods_FinalUnsplashApp.framework */; };
 		3C3C7B30281EF79A0091A344 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C7B2F281EF79A0091A344 /* DiscoverViewController.swift */; };
-		3C3C7B32281F08D40091A344 /* DiscoverySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C7B31281F08D40091A344 /* DiscoverySection.swift */; };
 		3C3C7B34281F0C640091A344 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C7B33281F0C640091A344 /* CategoryCell.swift */; };
 		3C3C7B37281F10180091A344 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C7B36281F10180091A344 /* Category.swift */; };
 		3C4A0D092817DD7D00A6C642 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A0D082817DD7D00A6C642 /* AppDelegate.swift */; };
@@ -36,8 +35,6 @@
 		3CABDE3128196BEC002D1CF7 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CABDE3028196BEC002D1CF7 /* CollectionViewCell.swift */; };
 		3CABDE352819ADA4002D1CF7 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CABDE342819ADA4002D1CF7 /* Collection.swift */; };
 		3CABDE372819CCAC002D1CF7 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CABDE362819CCAC002D1CF7 /* SearchViewController.swift */; };
-		3CC2FFB6281FFEDE0044A7D6 /* ListPhotosService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2FFB5281FFEDE0044A7D6 /* ListPhotosService.swift */; };
-		3CC2FFB8282004B80044A7D6 /* FetchListPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2FFB7282004B80044A7D6 /* FetchListPhotos.swift */; };
 		3CC2FFBB2820194C0044A7D6 /* PhotoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2FFBA2820194C0044A7D6 /* PhotoLayout.swift */; };
 		3CC2FFBD282029040044A7D6 /* DiscoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2FFBC282029040044A7D6 /* DiscoverCell.swift */; };
 		3CED22C9281F241000FFE2D6 /* CategoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED22C8281F241000FFE2D6 /* CategoryItemCell.swift */; };
@@ -58,7 +55,6 @@
 		348F6AE3281C8B67000507A2 /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
 		348F6AE7281D2504000507A2 /* UserDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewModel.swift; sourceTree = "<group>"; };
 		3C3C7B2F281EF79A0091A344 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
-		3C3C7B31281F08D40091A344 /* DiscoverySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverySection.swift; sourceTree = "<group>"; };
 		3C3C7B33281F0C640091A344 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		3C3C7B36281F10180091A344 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		3C4A0D052817DD7D00A6C642 /* FinalUnsplashApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinalUnsplashApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,8 +72,6 @@
 		3CABDE3028196BEC002D1CF7 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		3CABDE342819ADA4002D1CF7 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		3CABDE362819CCAC002D1CF7 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		3CC2FFB5281FFEDE0044A7D6 /* ListPhotosService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPhotosService.swift; sourceTree = "<group>"; };
-		3CC2FFB7282004B80044A7D6 /* FetchListPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchListPhotos.swift; sourceTree = "<group>"; };
 		3CC2FFBA2820194C0044A7D6 /* PhotoLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLayout.swift; sourceTree = "<group>"; };
 		3CC2FFBC282029040044A7D6 /* DiscoverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverCell.swift; sourceTree = "<group>"; };
 		3CED22C8281F241000FFE2D6 /* CategoryItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemCell.swift; sourceTree = "<group>"; };
@@ -140,8 +134,7 @@
 		3C3C7B35281F0D0F0091A344 /* CollectionViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				3C3C7B33281F0C640091A344 /* CategoryCell.swift */,
-				3CED22C8281F241000FFE2D6 /* CategoryItemCell.swift */,
+				3C4EC34B2822580200B75881 /* Category */,
 				3CABDE3028196BEC002D1CF7 /* CollectionViewCell.swift */,
 				3C4A0D2A2818054E00A6C642 /* PhotosCell.swift */,
 				3CC2FFBC282029040044A7D6 /* DiscoverCell.swift */,
@@ -206,8 +199,8 @@
 		3C4A0D212817E55500A6C642 /* ServiceLayer */ = {
 			isa = PBXGroup;
 			children = (
-				3CC2FFB4281FFE8A0044A7D6 /* SearchItem */,
-				3CC2FFB3281FFE7E0044A7D6 /* DiscoverPhotos */,
+				3C4A0D222817E58300A6C642 /* NetworkService.swift */,
+				3C4A0D242817F1A900A6C642 /* NetworkDataFetch.swift */,
 			);
 			path = ServiceLayer;
 			sourceTree = "<group>";
@@ -218,7 +211,6 @@
 				3C4A0D272817F95300A6C642 /* Photo.swift */,
 				3CABDE342819ADA4002D1CF7 /* Collection.swift */,
 				348F6ACD281C3E9D000507A2 /* User.swift */,
-				3C3C7B31281F08D40091A344 /* DiscoverySection.swift */,
 				3C3C7B36281F10180091A344 /* Category.swift */,
 			);
 			path = Models;
@@ -233,22 +225,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		3CC2FFB3281FFE7E0044A7D6 /* DiscoverPhotos */ = {
+		3C4EC34B2822580200B75881 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				3CC2FFB5281FFEDE0044A7D6 /* ListPhotosService.swift */,
-				3CC2FFB7282004B80044A7D6 /* FetchListPhotos.swift */,
+				3CED22C8281F241000FFE2D6 /* CategoryItemCell.swift */,
+				3C3C7B33281F0C640091A344 /* CategoryCell.swift */,
 			);
-			path = DiscoverPhotos;
-			sourceTree = "<group>";
-		};
-		3CC2FFB4281FFE8A0044A7D6 /* SearchItem */ = {
-			isa = PBXGroup;
-			children = (
-				3C4A0D222817E58300A6C642 /* NetworkService.swift */,
-				3C4A0D242817F1A900A6C642 /* NetworkDataFetch.swift */,
-			);
-			path = SearchItem;
+			path = Category;
 			sourceTree = "<group>";
 		};
 		3CC2FFB92820192E0044A7D6 /* Layout */ = {
@@ -401,7 +384,6 @@
 				348F6AE4281C8B67000507A2 /* UserDetailViewController.swift in Sources */,
 				3C4A0D0D2817DD7D00A6C642 /* ViewController.swift in Sources */,
 				3C4A0D092817DD7D00A6C642 /* AppDelegate.swift in Sources */,
-				3CC2FFB6281FFEDE0044A7D6 /* ListPhotosService.swift in Sources */,
 				348F6AE8281D2504000507A2 /* UserDetailViewModel.swift in Sources */,
 				348F6AD5281C41CB000507A2 /* CellAction.swift in Sources */,
 				3C3C7B34281F0C640091A344 /* CategoryCell.swift in Sources */,
@@ -416,11 +398,9 @@
 				3C4A0D2B2818054E00A6C642 /* PhotosCell.swift in Sources */,
 				348F6ADE281C4416000507A2 /* UserCell.swift in Sources */,
 				3C4A0D0B2817DD7D00A6C642 /* SceneDelegate.swift in Sources */,
-				3C3C7B32281F08D40091A344 /* DiscoverySection.swift in Sources */,
 				3C3C7B30281EF79A0091A344 /* DiscoverViewController.swift in Sources */,
 				348F6AE2281C68A7000507A2 /* CellConfigurator.swift in Sources */,
 				348F6ACE281C3E9D000507A2 /* User.swift in Sources */,
-				3CC2FFB8282004B80044A7D6 /* FetchListPhotos.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

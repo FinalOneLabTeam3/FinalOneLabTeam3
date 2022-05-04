@@ -63,12 +63,12 @@ class SearchViewController: UIViewController {
         return sc
     }()
     
-//    let searchController : UISearchController = {
-//        let searchController = UISearchController(searchResultsController: nil)
-//        searchController.hidesNavigationBarDuringPresentation = false
-//        searchController.obscuresBackgroundDuringPresentation = false
-//        return searchController
-//    }()
+    let searchController : UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
+        return searchController
+    }()
     
     
     
@@ -92,9 +92,9 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        self.navigationItem.hidesBackButton = true
         discoverViewController.setUpSearchController()
-//        setUpSearchController()
-        let searchController: UISearchController = discoverViewController.searchController
+        setUpSearchController()
         setUpSegmentControl()
         setUpCollectionView()
         setUpTableView()
@@ -102,9 +102,21 @@ class SearchViewController: UIViewController {
         setUpBackBarButtonItem()
         cellActionHandlers()
         
-        print(segmentedControl.frame.height)
         
         tableDirector.tableView.reloadData()
+    }
+    
+    init(searchText: String) {
+        super.init(nibName: nil, bundle: nil)
+        if searchText != "" {
+            searchController.searchBar.text = searchText
+            
+            fetchData(searchText: searchText)
+        }
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 
@@ -113,6 +125,7 @@ class SearchViewController: UIViewController {
     // MARK: - UI Elements
   
    
+
     private func setUpFilterButton(){
         view.addSubview(filterButton)
         filterButton.snp.makeConstraints { make in
@@ -125,14 +138,17 @@ class SearchViewController: UIViewController {
             
         view.addSubview(segmentedControl)
         segmentedControl.snp.makeConstraints { make in
-//            make.top.equalTo(searchController.searchBar.snp.bottom).offset(20)
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.trailing.leading.equalToSuperview().inset(20)
         }
     }
     
     
     private func setUpCollectionView(){
+
+        let customLayout = CustomLayout()
+        customLayout.delegate = self
+        collectionView.collectionViewLayout = customLayout
         collectionView.delegate = self
         collectionView.dataSource = self
         print(segmentedControl.frame.height)
@@ -144,11 +160,11 @@ class SearchViewController: UIViewController {
         }
     }
 
-//    private func setUpSearchController() {
-//
-//        navigationItem.searchController = searchController
-//        searchController.searchBar.delegate = self
-//    }
+    private func setUpSearchController() {
+
+        navigationItem.searchController = searchController
+        searchController.searchBar.delegate = self
+    }
     
     private func setUpTableView() {
         view.addSubview(tableView)
@@ -173,35 +189,33 @@ class SearchViewController: UIViewController {
         self.tableDirector.actionProxy
             .on(action: .didSelect) { (config: UserCellConfigurator, cell) in
                 let item = config.item
-//                print(item.username)
                 let userDetailVC = UserDetailViewController(viewModel: UserDetailViewModel(networkDataFetch: self.networkDataFetch, user: item))
                 self.navigationController?.pushViewController(userDetailVC, animated: true)
             }
     }
     
-//    private func fetchData(){
-//        timer?.invalidate()
-////        guard let searchText = searchBar.text else { return }
-//
-//
-//
-//        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [self](_) in
-//            self.networkDataFetch.fetchImages(searchTerm: searchText, path: PhotosCell.path) { [weak self] (results) in
-//                guard let fetchedPhotos = results else { return }
-//                self?.photos = fetchedPhotos.results
-//                self?.collectionView.reloadData()
-//            }
-//            self.networkDataFetch.fetchCollections(searchTerm: searchText, path: CollectionCell.path) { [weak self] (results) in
-//                guard let fetchedCollections = results else { return }
-//                self?.collections = fetchedCollections.results
-//                self?.collectionView.reloadData()
-//            }
-//            self.networkDataFetch.fetchUsers(searchTerm: searchText, path: UserCell.path) { [weak self] (results) in
-//                guard let fetchedUsers = results else { return }
-//                self?.users = fetchedUsers.results
-//            }
-//        })
-//    }
+    private func fetchData(searchText: String){
+        segmentedControl.isHidden = false
+        collectionView.isHidden = false
+        filterButton.isHidden = false
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [self](_) in
+            self.networkDataFetch.fetchImages(searchTerm: searchText, path: PhotosCell.path) { [weak self] (results) in
+                guard let fetchedPhotos = results else { return }
+                self?.photos = fetchedPhotos.results
+                self?.collectionView.reloadData()
+            }
+            self.networkDataFetch.fetchCollections(searchTerm: searchText, path: CollectionCell.path) { [weak self] (results) in
+                guard let fetchedCollections = results else { return }
+                self?.collections = fetchedCollections.results
+                self?.collectionView.reloadData()
+            }
+            self.networkDataFetch.fetchUsers(searchTerm: searchText, path: UserCell.path) { [weak self] (results) in
+                guard let fetchedUsers = results else { return }
+                self?.users = fetchedUsers.results
+            }
+        })
+    }
     
     @objc func didChangeSegmentedControlValue(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -209,11 +223,20 @@ class SearchViewController: UIViewController {
             print("Photos")
             collectionView.isHidden = false
             tableView.isHidden = true
+            let customLayout = CustomLayout()
+            customLayout.delegate = self
+            collectionView.collectionViewLayout = customLayout
+            collectionView.delegate = self
+            collectionView.dataSource = self
             collectionView.reloadData()
         case 1:
             print("Collections")
             collectionView.isHidden = false
             tableView.isHidden = true
+            let collectionLayout = UICollectionViewFlowLayout()
+            collectionView.collectionViewLayout = collectionLayout
+            collectionView.delegate = self
+            collectionView.dataSource = self
             collectionView.reloadData()
         case 2:
             print("Users")
@@ -250,14 +273,11 @@ extension SearchViewController: UICollectionViewDataSource{
             return cell
         case 1:
             print("selected segment = 1 collections")
-//            self.collectionView.reloadData()
             collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.reuseID)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.reuseID, for: indexPath) as! CollectionCell
             let unsplashCollection = collections[indexPath.item]
             cell.unsplashCollection = unsplashCollection
             return cell
-        case 2: //users
-            return UICollectionViewCell()
         default:
             return UICollectionViewCell()
                 
@@ -271,81 +291,33 @@ extension SearchViewController: UISearchBarDelegate{
     
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        segmentedControl.isHidden = false
-        collectionView.isHidden = false
-        filterButton.isHidden = false
-        timer?.invalidate()
         guard let searchText = searchBar.text else { return }
-        
-        
-            
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [self](_) in
-            self.networkDataFetch.fetchImages(searchTerm: searchText, path: PhotosCell.path) { [weak self] (results) in
-                guard let fetchedPhotos = results else { return }
-                self?.photos = fetchedPhotos.results
-                self?.collectionView.reloadData()
-            }
-            self.networkDataFetch.fetchCollections(searchTerm: searchText, path: CollectionCell.path) { [weak self] (results) in
-                guard let fetchedCollections = results else { return }
-                self?.collections = fetchedCollections.results
-                self?.collectionView.reloadData()
-            }
-            self.networkDataFetch.fetchUsers(searchTerm: searchText, path: UserCell.path) { [weak self] (results) in
-                guard let fetchedUsers = results else { return }
-                self?.users = fetchedUsers.results
-            }
-        })
+        fetchData(searchText: searchText)
     }
     
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        view.removeFromSuperview()
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
 extension SearchViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-       
         
-        switch segmentedControl.selectedSegmentIndex{
-        case 0:
-            let paddingSpace = sectionInserts.left * (itemsPerRow + 0.5)
-            let availableWidth = collectionView.frame.width - paddingSpace
-            let widthPerItem = availableWidth / itemsPerRow
+        let widthPerItem = collectionView.frame.width - (sectionInserts.left * 2)
+        let collection = collections[indexPath.item]
+        guard let coverPhoto = collection.cover_photo else { return CGSize(width: 0, height: 0) }
+        let height = CGFloat(coverPhoto.height) * widthPerItem / CGFloat(coverPhoto.width)
+        return CGSize(width: widthPerItem, height: height)
+        
+        
+    }
+}
+
+extension SearchViewController: CustomLayoutDelegate{
+
+    func collectionView(_ collectionView: UICollectionView, sizeOfPhotoAtIndexPath indexPath: IndexPath) -> CGSize {
             let photo = photos[indexPath.item]
-            let height = CGFloat(photo.height) * widthPerItem / CGFloat(photo.width)
-            return CGSize(width: widthPerItem, height: height)
-        case 1:
-            let widthPerItem = collectionView.frame.width - (sectionInserts.left * 2)
-            let collection = collections[indexPath.item]
-            guard let coverPhoto = collection.cover_photo else { return CGSize(width: 0, height: 0) }
-            let height = CGFloat(coverPhoto.height) * widthPerItem / CGFloat(coverPhoto.width)
-            return CGSize(width: widthPerItem, height: height)
-        default: break
-        }
-        return CGSize(width: 0, height: 0)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInserts
-        
-//        switch segmentedControl.selectedSegmentIndex {
-//        case 0:
-//            return sectionInserts
-//        case 1:
-//            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        default: return sectionInserts
-//        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInserts.left
-        
-//        switch segmentedControl.selectedSegmentIndex {
-//        case 0:
-//            return sectionInserts.left
-//        case 1:
-//            return 0
-//        default: return 0
-//        }
+            return  CGSize(width: photo.width, height: photo.height)
     }
 }
