@@ -11,7 +11,7 @@ import SnapKit
 
 class PhotosCell: UICollectionViewCell {
     
-    static let reuseID = "PhotosCell"
+    static let reuseID = "PhotoCell"
     
     static let path = "/search/photos"
     
