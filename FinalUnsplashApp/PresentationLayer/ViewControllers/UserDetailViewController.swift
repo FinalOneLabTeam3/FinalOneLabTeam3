@@ -7,9 +7,14 @@
 
 import UIKit
 
+import UIKit
+
 class UserDetailViewController: UIViewController {
 
     private let viewModel: UserDetailViewModel
+    
+    private let headerHeightWithLocation: CGFloat = 240
+    private let headerHeightWithoutLocation: CGFloat = 210
     
     private lazy var collectionView: UICollectionView = {
         let collectionLayout = UICollectionViewFlowLayout()
@@ -104,6 +109,31 @@ class UserDetailViewController: UIViewController {
         view.addSubview(mainStackView)
         return view
     }()
+    
+    private let placeholderImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "photo")
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .gray
+        return imageView
+    }()
+    
+    private let placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Placeholder"
+        label.textColor = .gray
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private lazy var placeholderStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [placeholderImageView, placeholderLabel])
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 8
+        stackView.isHidden = true
+        return stackView
+    }()
 
     init(viewModel: UserDetailViewModel) {
         self.viewModel = viewModel
@@ -148,6 +178,32 @@ class UserDetailViewController: UIViewController {
         viewModel.reloadCollectionView = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
+                
+                switch self?.segmentedControl.selectedSegmentIndex {
+                case 0:
+                    if self?.viewModel.getUserPhotos().count == 0 {
+                        self?.placeholderStackView.isHidden = false
+                        self?.placeholderLabel.text = "No user's photos"
+                    } else {
+                        self?.placeholderStackView.isHidden = true
+                    }
+                case 1:
+                    if self?.viewModel.getLikedPhotos().count == 0 {
+                        self?.placeholderStackView.isHidden = false
+                        self?.placeholderLabel.text = "No liked photos"
+                    } else {
+                        self?.placeholderStackView.isHidden = true
+                    }
+                case 2:
+                    if self?.viewModel.getCollections().count == 0 {
+                        self?.placeholderStackView.isHidden = false
+                        self?.placeholderLabel.text = "No collections"
+                    } else {
+                        self?.placeholderStackView.isHidden = true
+                    }
+                default:
+                    return
+                }
             }
         }
     }
@@ -158,10 +214,37 @@ class UserDetailViewController: UIViewController {
         setUpUserInfo()
         
         view.addSubview(collectionView)
+        view.addSubview(placeholderStackView)
         
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        layoutPlaceholderStack()
+    }
+    
+    private func layoutPlaceholderStack() {
+        placeholderImageView.snp.makeConstraints {
+            $0.height.equalTo(100)
+        }
+        
+        placeholderLabel.snp.makeConstraints {
+            $0.height.equalTo(20)
+        }
+        
+        placeholderStackView.snp.makeConstraints {
+            $0.width.equalTo(200)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(getPlaceHolderPosition())
+        }
+    }
+    
+    private func getPlaceHolderPosition() -> CGFloat {
+        let navigationBarHeight = navigationController!.navigationBar.frame.height
+        let firstHeaderHeight = viewModel.getUser().location != nil ? headerHeightWithLocation : headerHeightWithoutLocation
+        let secondHeaderHeight = segmentedControl.frame.height + 10 * 2
+        let generalHeaderHeight = navigationBarHeight + firstHeaderHeight + secondHeaderHeight
+        return generalHeaderHeight + 20
     }
     
     private func setUpShareButton() {
@@ -220,16 +303,22 @@ class UserDetailViewController: UIViewController {
             print("Photos")
             if viewModel.getUserPhotos().isEmpty {
                 viewModel.fetchUserPhotos()
+            } else {
+                placeholderStackView.isHidden = true
             }
         case 1:
             print("Likes")
             if viewModel.getLikedPhotos().isEmpty {
                 viewModel.fetchLikedPhotos()
+            } else {
+                placeholderStackView.isHidden = true
             }
         case 2:
             print("Collections")
             if viewModel.getCollections().isEmpty {
                 viewModel.fetchCollections()
+            } else {
+                placeholderStackView.isHidden = true
             }
         default:
             print("None")
@@ -371,9 +460,9 @@ extension UserDetailViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if (section == 0) {
             if viewModel.getUser().location != nil {
-                return CGSize(width: collectionView.frame.width, height: 240)
+                return CGSize(width: collectionView.frame.width, height: headerHeightWithLocation)
             } else {
-                return CGSize(width: collectionView.frame.width, height: 210)
+                return CGSize(width: collectionView.frame.width, height: headerHeightWithoutLocation)
             }
         }
         return CGSize(width: collectionView.frame.width, height: segmentedControl.frame.height + 10 * 2)
