@@ -9,38 +9,18 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    var networkDataFetch = NetworkDataFetch()
+    private var viewModel = SearchViewModel(networkDataFetch: NetworkDataFetch.shared)
+    
 
-    private var users = [UnsplashUser]() {
-        didSet {
-            let cellItems = cellBuilder.reset()
-                .buildCells(with: users)
-                .getConfigurableCells()
-            
-            tableDirector.reloadTable(with: cellItems)
-        }
-    }
-    
-    let discoverViewController = DiscoverViewController()
-    
-    var photos = [UnsplashPhoto]()
-    
-    private var collections = [UnsplashCollection]() {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
     
     private let itemsPerRow: CGFloat = 2
     private let sectionInserts = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 
-    private var timer: Timer?
    
     private let collectionView: UICollectionView = {
         let collectionLayout = UICollectionViewFlowLayout()
         collectionLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
-        collectionView.isHidden = true
         return collectionView
     }()
     
@@ -51,7 +31,6 @@ class SearchViewController: UIViewController {
         filterButton.setImage(UIImage(systemName: "slider.horizontal.3") , for: .normal)
         filterButton.imageView?.contentMode = .scaleAspectFit
         filterButton.layer.cornerRadius = 5
-        filterButton.isHidden = true
         return filterButton
     }()
     
@@ -59,7 +38,6 @@ class SearchViewController: UIViewController {
         let sc = UISegmentedControl(items: ["Photos", "Collections", "Users"])
         sc.selectedSegmentIndex = 0
         sc.addTarget(self, action: #selector(didChangeSegmentedControlValue), for: .valueChanged)
-        sc.isHidden = true
         return sc
     }()
     
@@ -77,7 +55,6 @@ class SearchViewController: UIViewController {
         tableView.rowHeight = 100
         tableView.clipsToBounds = true
         tableView.backgroundColor = .systemFill
-        tableView.isHidden = true
         return tableView
     }()
     
@@ -93,26 +70,28 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         self.navigationItem.hidesBackButton = true
-        discoverViewController.setUpSearchController()
         setUpSearchController()
         setUpSegmentControl()
         setUpCollectionView()
         setUpTableView()
         setUpFilterButton()
         setUpBackBarButtonItem()
+        bindViewModel()
         cellActionHandlers()
-        
-        
         tableDirector.tableView.reloadData()
     }
     
-    init(searchText: String) {
+    init(searchText: String, viewModel: SearchViewModel) {
         super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
         if searchText != "" {
             searchController.searchBar.text = searchText
-            
-            fetchData(searchText: searchText)
+            viewModel.fetchData(searchText: searchText)
+            self.collectionView.reloadData()
         }
+        bindViewModel()
+        
+        
     }
 
     required init?(coder: NSCoder) {
@@ -124,6 +103,22 @@ class SearchViewController: UIViewController {
 
     // MARK: - UI Elements
   
+    private func bindViewModel() {
+        viewModel.updateUsersTableView = { [weak self] users in
+            let cellItems = self?.cellBuilder.reset()
+                .buildCells(with: users)
+                .getConfigurableCells()
+            guard let cellItems = cellItems else { return }
+            self?.tableDirector.reloadTable(with: cellItems)
+            self?.tableView.isHidden = true
+        }
+
+        viewModel.reloadCollectionView = { [weak self] in
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
+    }
    
 
     private func setUpFilterButton(){
@@ -189,33 +184,12 @@ class SearchViewController: UIViewController {
         self.tableDirector.actionProxy
             .on(action: .didSelect) { (config: UserCellConfigurator, cell) in
                 let item = config.item
-                let userDetailVC = UserDetailViewController(viewModel: UserDetailViewModel(networkDataFetch: self.networkDataFetch, user: item))
+                let userDetailVC = UserDetailViewController(viewModel: UserDetailViewModel(networkDataFetch: self.viewModel.networkDataFetch, user: item))
                 self.navigationController?.pushViewController(userDetailVC, animated: true)
             }
     }
     
-    private func fetchData(searchText: String){
-        segmentedControl.isHidden = false
-        collectionView.isHidden = false
-        filterButton.isHidden = false
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [self](_) in
-            self.networkDataFetch.fetchImages(searchTerm: searchText, path: PhotosCell.path) { [weak self] (results) in
-                guard let fetchedPhotos = results else { return }
-                self?.photos = fetchedPhotos.results
-                self?.collectionView.reloadData()
-            }
-            self.networkDataFetch.fetchCollections(searchTerm: searchText, path: CollectionCell.path) { [weak self] (results) in
-                guard let fetchedCollections = results else { return }
-                self?.collections = fetchedCollections.results
-                self?.collectionView.reloadData()
-            }
-            self.networkDataFetch.fetchUsers(searchTerm: searchText, path: UserCell.path) { [weak self] (results) in
-                guard let fetchedUsers = results else { return }
-                self?.users = fetchedUsers.results
-            }
-        })
-    }
+
     
     @objc func didChangeSegmentedControlValue(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -248,16 +222,15 @@ class SearchViewController: UIViewController {
     }
 
 }
-
+// MARK: - UICollectionViewDataSource
 extension SearchViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch segmentedControl.selectedSegmentIndex{
         case 0:
-            return photos.count
+            return viewModel.photos.count
         case 1:
-            print("collection count \(collections.count)")
-            return collections.count
+            return viewModel.collections.count
         default:
             return 0
         }
@@ -266,16 +239,17 @@ extension SearchViewController: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch segmentedControl.selectedSegmentIndex{
         case 0:
+            
             collectionView.register(PhotosCell.self, forCellWithReuseIdentifier: PhotosCell.reuseID)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCell.reuseID, for: indexPath) as! PhotosCell
-            let unsplashPhoto = photos[indexPath.item]
+            let unsplashPhoto = viewModel.photos[indexPath.item]
             cell.unsplashPhoto = unsplashPhoto
             return cell
         case 1:
             print("selected segment = 1 collections")
             collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.reuseID)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.reuseID, for: indexPath) as! CollectionCell
-            let unsplashCollection = collections[indexPath.item]
+            let unsplashCollection = viewModel.collections[indexPath.item]
             cell.unsplashCollection = unsplashCollection
             return cell
         default:
@@ -285,14 +259,16 @@ extension SearchViewController: UICollectionViewDataSource{
         
     }
 }
-
+// MARK: - UISearchBarDelegate
 extension SearchViewController: UISearchBarDelegate{
     
     
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
-        fetchData(searchText: searchText)
+        viewModel.fetchData(searchText: searchText)
+        self.collectionView.reloadData()
+        
     }
     
     
@@ -305,7 +281,7 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let widthPerItem = collectionView.frame.width - (sectionInserts.left * 2)
-        let collection = collections[indexPath.item]
+        let collection = viewModel.collections[indexPath.item]
         guard let coverPhoto = collection.cover_photo else { return CGSize(width: 0, height: 0) }
         let height = CGFloat(coverPhoto.height) * widthPerItem / CGFloat(coverPhoto.width)
         return CGSize(width: widthPerItem, height: height)
@@ -314,10 +290,12 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout{
     }
 }
 
+// MARK: - CustomLayoutDelegate
+
 extension SearchViewController: CustomLayoutDelegate{
 
     func collectionView(_ collectionView: UICollectionView, sizeOfPhotoAtIndexPath indexPath: IndexPath) -> CGSize {
-            let photo = photos[indexPath.item]
+        let photo = viewModel.photos[indexPath.item]
             return  CGSize(width: photo.width, height: photo.height)
     }
 }

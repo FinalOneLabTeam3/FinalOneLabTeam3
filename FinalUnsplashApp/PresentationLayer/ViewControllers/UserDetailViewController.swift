@@ -3,7 +3,6 @@
 //  FinalUnsplashApp
 //
 //  Created by Ramir Amrayev on 30.04.2022.
-//
 
 import UIKit
 

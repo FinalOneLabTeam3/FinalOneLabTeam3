@@ -10,8 +10,7 @@ import SnapKit
 
 class DiscoverViewController: UIViewController {
     
-    private var timer: Timer?
-    var cancelButtonTapped = false
+    private let viewModel: DiscoverViewModel
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -29,6 +28,15 @@ class DiscoverViewController: UIViewController {
         setUpCollectionView()
     }
     
+    init(viewModel: DiscoverViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         searchController.searchBar.text = ""
         searchController.searchBar.showsCancelButton = false
@@ -41,11 +49,13 @@ class DiscoverViewController: UIViewController {
         return searchController
     }()
     
+    // MARK: - UI Elements
     
     func setUpSearchController() {
         navigationItem.searchController = searchController
         searchController.searchBar.delegate = self
     }
+    
     
     private func setUpCollectionView(){
         collectionView.delegate = self
@@ -60,19 +70,18 @@ class DiscoverViewController: UIViewController {
     
 }
 
+// MARK: - UISearchBarDelegate
 extension DiscoverViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
-        let searchViewController = SearchViewController(searchText: searchText)
+       
+        let searchViewController = SearchViewController(searchText: searchText, viewModel: SearchViewModel(networkDataFetch: viewModel.dataFetch))
         self.navigationController?.pushViewController(searchViewController, animated: true)
     }
 }
 
-extension DiscoverViewController: UICollectionViewDelegate {
-    
-    
-}
+// MARK: - UICollectionViewDataSource
 extension DiscoverViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -97,7 +106,8 @@ extension DiscoverViewController: UICollectionViewDataSource {
         return 1
     }
 }
-    
+
+// MARK: - UICollectionViewDelegateFlowLayout
 extension DiscoverViewController: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

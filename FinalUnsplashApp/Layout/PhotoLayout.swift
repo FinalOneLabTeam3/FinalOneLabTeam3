@@ -9,7 +9,7 @@ import Foundation
 
 import UIKit
 
-protocol CustomLayoutDelegate: class {
+protocol CustomLayoutDelegate: AnyObject {
     func collectionView(_ collectionView: UICollectionView, sizeOfPhotoAtIndexPath indexPath: IndexPath) -> CGSize
 }
 

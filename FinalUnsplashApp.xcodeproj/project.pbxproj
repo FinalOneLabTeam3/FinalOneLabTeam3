@@ -32,6 +32,9 @@
 		3C4A0D252817F1A900A6C642 /* NetworkDataFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A0D242817F1A900A6C642 /* NetworkDataFetch.swift */; };
 		3C4A0D282817F95300A6C642 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A0D272817F95300A6C642 /* Photo.swift */; };
 		3C4A0D2B2818054E00A6C642 /* PhotosCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A0D2A2818054E00A6C642 /* PhotosCell.swift */; };
+		3C4EC3512822656100B75881 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4EC3502822656100B75881 /* SearchViewModel.swift */; };
+		3C4EC35328227CD600B75881 /* DiscoverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4EC35228227CD600B75881 /* DiscoverViewModel.swift */; };
+		3C4EC3552822923300B75881 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4EC3542822923300B75881 /* CategoryViewModel.swift */; };
 		3CABDE3128196BEC002D1CF7 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CABDE3028196BEC002D1CF7 /* CollectionViewCell.swift */; };
 		3CABDE352819ADA4002D1CF7 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CABDE342819ADA4002D1CF7 /* Collection.swift */; };
 		3CABDE372819CCAC002D1CF7 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CABDE362819CCAC002D1CF7 /* SearchViewController.swift */; };
@@ -69,6 +72,9 @@
 		3C4A0D242817F1A900A6C642 /* NetworkDataFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDataFetch.swift; sourceTree = "<group>"; };
 		3C4A0D272817F95300A6C642 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		3C4A0D2A2818054E00A6C642 /* PhotosCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCell.swift; sourceTree = "<group>"; };
+		3C4EC3502822656100B75881 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		3C4EC35228227CD600B75881 /* DiscoverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewModel.swift; sourceTree = "<group>"; };
+		3C4EC3542822923300B75881 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		3CABDE3028196BEC002D1CF7 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		3CABDE342819ADA4002D1CF7 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		3CABDE362819CCAC002D1CF7 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +133,9 @@
 			isa = PBXGroup;
 			children = (
 				348F6AE7281D2504000507A2 /* UserDetailViewModel.swift */,
+				3C4EC3502822656100B75881 /* SearchViewModel.swift */,
+				3C4EC35228227CD600B75881 /* DiscoverViewModel.swift */,
+				3C4EC3542822923300B75881 /* CategoryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -375,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				348F6AE0281C457D000507A2 /* UserCellBuilder.swift in Sources */,
+				3C4EC35328227CD600B75881 /* DiscoverViewModel.swift in Sources */,
 				348F6AD8281C42B1000507A2 /* CellBuilder.swift in Sources */,
 				3CABDE3128196BEC002D1CF7 /* CollectionViewCell.swift in Sources */,
 				3CC2FFBB2820194C0044A7D6 /* PhotoLayout.swift in Sources */,
@@ -395,7 +405,9 @@
 				348F6AD3281C4199000507A2 /* CellActionProxy.swift in Sources */,
 				3C3C7B37281F10180091A344 /* Category.swift in Sources */,
 				3CABDE372819CCAC002D1CF7 /* SearchViewController.swift in Sources */,
+				3C4EC3552822923300B75881 /* CategoryViewModel.swift in Sources */,
 				3C4A0D2B2818054E00A6C642 /* PhotosCell.swift in Sources */,
+				3C4EC3512822656100B75881 /* SearchViewModel.swift in Sources */,
 				348F6ADE281C4416000507A2 /* UserCell.swift in Sources */,
 				3C4A0D0B2817DD7D00A6C642 /* SceneDelegate.swift in Sources */,
 				3C3C7B30281EF79A0091A344 /* DiscoverViewController.swift in Sources */,

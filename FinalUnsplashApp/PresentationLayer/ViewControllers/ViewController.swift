@@ -8,6 +8,8 @@
 import UIKit
 
 class ViewController: UITabBarController {
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,7 +17,7 @@ class ViewController: UITabBarController {
     }
     private func configureTabBar(){
         tabBar.backgroundColor = .systemGray5
-        let feedVC = configureNavBarController(vc: DiscoverViewController(), image: "magnifyingglass")
+        let feedVC = configureNavBarController(vc: DiscoverViewController(viewModel: DiscoverViewModel(dataFetch: NetworkDataFetch.shared)), image: "magnifyingglass")
 //        feedVC.title = "My Photos"
         self.setViewControllers([feedVC], animated: false)
     }

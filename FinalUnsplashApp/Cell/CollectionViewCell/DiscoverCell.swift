@@ -9,13 +9,9 @@ import UIKit
 
 class DiscoverCell: UICollectionViewCell {
     
-    let dataFetch = NetworkDataFetch()
-    
-    private var timer: Timer?
+    let vm = DiscoverViewModel(dataFetch: NetworkDataFetch.shared)
     
     static let reuseID = "DiscoverCell"
-    
-    var listPhotos = [UnsplashPhoto]()
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -24,23 +20,14 @@ class DiscoverCell: UICollectionViewCell {
         return cv
     }()
     
-
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [self](_) in
-            self.dataFetch.fetchImages(searchTerm: "random", path: PhotosCell.path) { [weak self] (results) in
-                guard let fetchedPhotos = results else { return }
-                self?.listPhotos = fetchedPhotos.results
-                self?.collectionView.reloadData()
-            }
-        })
-        
-        print("list photos count = \(listPhotos.count)")
+        vm.fetchPhotos()
+        self.collectionView.reloadData()
         layoutUI()
+        bindViewModel()
     }
+
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -64,6 +51,14 @@ class DiscoverCell: UICollectionViewCell {
             
         }
     }
+    
+    private func bindViewModel(){
+        vm.reloadCollectionView = { [weak self] in
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
+    }
 
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -71,15 +66,13 @@ class DiscoverCell: UICollectionViewCell {
     
     
 }
-
-extension DiscoverCell: UICollectionViewDelegate {
-
-}
+// MARK: - UICollectionViewDataSource
 extension DiscoverCell: UICollectionViewDataSource {
     
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return listPhotos.count
+        
+        return vm.listPhotos.count
     }
 
 
@@ -87,22 +80,24 @@ extension DiscoverCell: UICollectionViewDataSource {
         
         collectionView.register(PhotosCell.self, forCellWithReuseIdentifier: PhotosCell.reuseID)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCell.reuseID, for: indexPath) as! PhotosCell
-        let unsplashPhotos = listPhotos[indexPath.item]
+       
+        let unsplashPhotos = vm.listPhotos[indexPath.item]
         cell.unsplashPhoto = unsplashPhotos
         return cell
     }
     
 }
 
-
+// MARK: - CustomLayoutDelegate
 extension DiscoverCell: CustomLayoutDelegate{
 
     func collectionView(_ collectionView: UICollectionView, sizeOfPhotoAtIndexPath indexPath: IndexPath) -> CGSize {
-            let photo = listPhotos[indexPath.item]
+    
+        let photo = vm.listPhotos[indexPath.item]
             return  CGSize(width: photo.width, height: photo.height)
     }
 }
-
+// MARK: - UICollectionViewDelegateFlowLayout
 extension DiscoverCell: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)

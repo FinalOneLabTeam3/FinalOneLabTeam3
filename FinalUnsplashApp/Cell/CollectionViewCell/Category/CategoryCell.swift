@@ -13,6 +13,8 @@ class CategoryCell: UICollectionViewCell {
     
     static let reuseID = "CategoryCell"
     
+    private let vm = CategoryViewModel()
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
@@ -36,23 +38,7 @@ class CategoryCell: UICollectionViewCell {
         discoverSectionTitle.font = UIFont.boldSystemFont(ofSize: 20)
         return discoverSectionTitle
     }()
-    
-    
-    
-    private let categories = [Category(imageName: "nature", categoryLabel: "Nature"),
-                              Category(imageName: "texture", categoryLabel: "Texture"),
-                              Category(imageName: "black and white", categoryLabel: "Black and White"),
-                              Category(imageName: "abstract", categoryLabel: "Abstract"),
-                              Category(imageName: "space", categoryLabel: "Space"),
-                              Category(imageName: "minimal-1", categoryLabel: "Minimal"),
-                              Category(imageName: "animals", categoryLabel: "Animals"),
-                              Category(imageName: "sky", categoryLabel: "Sky"),
-                              Category(imageName: "flowers", categoryLabel: "Flowers"),
-                              Category(imageName: "travel", categoryLabel: "Travel"),
-                              Category(imageName: "underwater-1", categoryLabel: "Underwater"),
-                              Category(imageName: "drones", categoryLabel: "Drones"),
-                              Category(imageName: "architecture", categoryLabel: "Architecture"),
-                              Category(imageName: "gradients", categoryLabel: "Gradients")]
+
     
     
     override init(frame: CGRect) {
@@ -69,11 +55,9 @@ class CategoryCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        
-        
-        
     }
+    
+    // MARK: - UI Elements
     
     private func layoutUI(){
         
@@ -112,9 +96,8 @@ class CategoryCell: UICollectionViewCell {
     
 }
 
-extension CategoryCell: UICollectionViewDelegate {
+// MARK: - UICollectionViewDataSource
 
-}
 extension CategoryCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -126,7 +109,7 @@ extension CategoryCell: UICollectionViewDataSource {
         
         collectionView.register(CategoryItemCell.self, forCellWithReuseIdentifier: CategoryCell.reuseID)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.reuseID, for: indexPath) as! CategoryItemCell
-        cell.configure(category: categories[indexPath.item])
+        cell.configure(category: vm.categories[indexPath.item])
         return cell
         
 
@@ -134,7 +117,7 @@ extension CategoryCell: UICollectionViewDataSource {
 
 
 }
-
+// MARK: - UICollectionViewDelegateFlowLayout
 extension CategoryCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
