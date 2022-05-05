@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = .label
+        collectionView.backgroundColor = .black
         return collectionView
     }()
     

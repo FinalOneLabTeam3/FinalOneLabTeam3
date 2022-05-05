@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TabBarController.swift
 //  FinalUnsplashApp
 //
 //  Created by Akniyet Turdybay on 26.04.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UITabBarController {
+class TabBarController: UITabBarController {
     
 
     override func viewDidLoad() {
@@ -19,7 +19,7 @@ class ViewController: UITabBarController {
     
     private func configureTabBar() {
         let feedVC = configureNavBarController(vc: DiscoverViewController(viewModel: DiscoverViewModel(dataFetch: NetworkDataFetch.shared)), image: "magnifyingglass")
-        let homeVC = configureNavBarController(vc: HomeViewController(viewModel: HomeViewModel(networkDataFetch: NetworkDataFetch())), image: "photo")
+        let homeVC = configureNavBarController(vc: HomeViewController(viewModel: HomeViewModel(networkDataFetch: NetworkDataFetch.shared)), image: "photo")
         self.setViewControllers([homeVC, feedVC], animated: false)
         
     }

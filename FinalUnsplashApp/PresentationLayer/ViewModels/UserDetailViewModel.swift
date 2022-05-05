@@ -84,7 +84,6 @@ class UserDetailViewModel {
         self.networkDataFetch.fetchUserCollections(username: user.username, page: collectionsPage) { [weak self] (results) in
             guard let fetchedCollections = results else { return }
             self?.collections.append(contentsOf: fetchedCollections)
-            print( self?.collectionsPage)
             self?.collectionsPage += 1
             self?.isCollectionsLoading = false
         }

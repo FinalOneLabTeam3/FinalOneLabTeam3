@@ -13,6 +13,7 @@ struct Collection: Decodable{
 }
 
 struct UnsplashCollection: Decodable{
+    let id: String
     let title: String
     
     let cover_photo: CoverPhoto?

@@ -210,6 +210,7 @@ class UserDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setUpShareButton()
         setUpUserInfo()
+        setUpBackBarButtonItem()
         
         view.addSubview(collectionView)
         view.addSubview(placeholderStackView)
@@ -293,6 +294,13 @@ class UserDetailViewController: UIViewController {
             $0.top.equalTo(userImageView.snp.bottom).offset(15)
             $0.leading.equalTo(userImageView)
         }
+    }
+    
+    private func setUpBackBarButtonItem() {
+        let backBarBtnItem = UIBarButtonItem()
+        backBarBtnItem.title = ""
+        backBarBtnItem.tintColor = .label
+        navigationItem.backBarButtonItem = backBarBtnItem
     }
     
     @objc func didChangeSegmentedControlValue(sender: UISegmentedControl) {
@@ -414,10 +422,6 @@ extension UserDetailViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if segmentedControl.selectedSegmentIndex == 2 {
             return 10
@@ -491,6 +495,16 @@ extension UserDetailViewController: UICollectionViewDelegateFlowLayout {
             default:
                 return
             }
+        }
+    }
+    
+    // MARK: - UICollectionView Action
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 1 && segmentedControl.selectedSegmentIndex == 2 {
+            print("Collection: \(viewModel.getCollections()[indexPath.row].title)")
+            let collection = viewModel.getCollections()[indexPath.row]
+            let collectionPhotoVC = CollectionPhotoViewController(viewModel: CollectionPhotoViewModel(networkDataFetch: NetworkDataFetch.shared, collection: collection))
+            self.navigationController?.pushViewController(collectionPhotoVC, animated: true)
         }
     }
 }

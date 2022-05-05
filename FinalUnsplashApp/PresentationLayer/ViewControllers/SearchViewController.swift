@@ -110,7 +110,9 @@ class SearchViewController: UIViewController {
                 .getConfigurableCells()
             guard let cellItems = cellItems else { return }
             self?.tableDirector.reloadTable(with: cellItems)
-            self?.tableView.isHidden = true
+            if self?.segmentedControl.selectedSegmentIndex != 2 {
+                self?.tableView.isHidden = true
+            }
         }
 
         viewModel.reloadCollectionView = { [weak self] in
@@ -268,7 +270,6 @@ extension SearchViewController: UISearchBarDelegate{
         guard let searchText = searchBar.text else { return }
         viewModel.fetchData(searchText: searchText)
         self.collectionView.reloadData()
-        
     }
     
     

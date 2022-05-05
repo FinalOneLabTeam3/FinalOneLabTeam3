@@ -117,6 +117,19 @@ class NetworkDataFetch{
         }
     }
     
+    func fetchCollectionPhotos(collection: UnsplashCollection, page: Int, completion: @escaping ([UnsplashPhoto]?) -> ()){
+        networkService.request(path: "/collections/\(collection.id)/photos", page: page) { (data, error) in
+            if let error = error {
+                print("Error received requesting data: \(error.localizedDescription)")
+                completion(nil)
+            }
+            
+            let decode = self.decodeJSON(type: [UnsplashPhoto].self, from: data)
+            print("fetched photos")
+            completion(decode)
+        }
+    }
+    
     func decodeJSON<T: Decodable>(type: T.Type, from: Data?) -> T? {
         let decoder = JSONDecoder()
         guard let data = from else {return nil}
